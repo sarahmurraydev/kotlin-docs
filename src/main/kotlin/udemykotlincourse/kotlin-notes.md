@@ -92,6 +92,21 @@ fun shouldChangeWater(day: string, temp: Int, dirty: Int) : Boolean {
     * Functions in kotlin will always return something (even when they don’t explicitly say they do) the default type is called “Unit” which basically means “no value”.
 * Declare with `fun` keyword
 
+
+### Compile Vs Runtime
+```kotlin
+val random1 = random()
+val random2 = {random()}
+```
+
+`random1`: 
+* value assigned at compile time
+* value never changes when the variable is accessed.
+
+`random2`:
+* lambda assigned at compile time 
+* the lambda is executed every time the variable is referenced, returning a different value.
+
 ### Optional And Default Parameters 
 Not every parameter of a functions needs to be passed in everytime. To make an optional parameter, you simply give the parameter a default value. 
 ```kotlin
@@ -144,7 +159,7 @@ fun exampleFun(val1, val2, fixedVal = getOurDefaultValue()) {
 ```
 Be careful with example 3. You do not want to use an *expensive* operations as a default parameter (ex: reading files, allocating a lot of memory) as they can really slow down your code. This is because **default parameters are evaluated at call time by kotlin**. This can also lead to out of memory errors. 
 
-### Anonymous Functions:
+### Anonymous Functions aka Lambda:
 Functions that don’t have a name. 
 
 But tbh they kinda do bc they have a val that has a name that serves as a reference to the nameless function and to call the function, you call that value passing in the parameters like so:
@@ -158,11 +173,57 @@ val stringLength: Int = stringLengthFunc("Android")
 
 But I guess you save some code 🤷🏼‍♀️
 
+```kotlin
+// Lambda - a function with no name, always surrounded by curly brackets, still use `()` to invoke it
+{ println("Hello") }() 
+
+// you can assign lambdas to a name and then call it like you would a regular function
+val sayHello = { println("Hello") }
+sayHello()
+
+// you can pass variables into it as such: 
+val greeting = "hello friends, my name is Sarah"
+val greetFolks = { phrase: String -> println(phrase) }
+greetFolks(greeting)
+
+// you can use kotlin's type interference to avoid having to declare the variable type directly
+val greetFolks: (String) -> Unit = { phrase -> println(phrase) }
+```
+The real power of lambda can be seen when you are building "Higher Order Functions" ...
+
 ### Higher Order Functions
-Functions that take in other functions as a parameter are called higher order functions.
-Ex: dialog fragment extension
-If the function being passed in is the last parameter you can often write it as an anonymous lambda function.
-For more on this: https://kotlinlang.org/docs/reference/lambdas.html
+* Functions that take in other functions as a parameter are called higher order functions.
+    * Ex: dialog fragment extension
+* If the function being passed in is the last parameter you can often write it as an anonymous lambda function.
+* For more on this: https://kotlinlang.org/docs/reference/lambdas.html
+
+```kotlin
+// this can be useful when you want to call a certain function in another part of your application
+// say you have the following set of functions like so: 
+
+val dirty = 20
+fun updateTimeToFeedFish(time: Int) = time + 10 // regular name function
+val waterFilter: (Int) -> Int = { count -> count / 2 } // lambda 
+
+// higher order function, taking in an operation function
+fun updateDirty(dirty: Int, operation: (Int) -> Int): Int {
+    return operation(dirty)
+}
+
+// the higher order function can be called in a variety of ways: 
+updateDirty(dirty, waterFilter) // pass the function as a param
+
+// if you want to pass a named function into a higher order function 
+updateDirty(dirty, ::feedFish)  
+
+// lambda functions can be passed into a higher order function as the last parameter
+// in this case you don't need to wrap the lambda in the parens
+updateDirty(dirty) { dirty -> 
+  dirty / 2 
+}
+
+```
+
 
 ### Compact Functions:
 
