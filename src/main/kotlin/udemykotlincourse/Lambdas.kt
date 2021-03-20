@@ -1,6 +1,5 @@
 package udemykotlincourse
 
-import java.lang.Math.random
 import java.util.Random
 
 fun main(){

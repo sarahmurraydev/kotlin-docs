@@ -329,7 +329,65 @@ val thisIsWrong = while (false) {}
   * `for (i in “a”...”z”)` or
   * `for (i in 1..5)` or
   * `for (i in 5 downTo 1)`
-    
+  
+## Object Oriented Terminology Overview: 
+**Object Oriented Programming (OOP)** is a programming paradigm based on the concept of "objects", which contain data and code. Data within these "objects" is often known as *attributes* or *properties*.
+
+Some Kotlin OOP terms include: 
+* **Class** - object blueprint (ex: an aquarium "plan")
+* **Object** - instance of a class (ex: an actual aquarium, like Camden)
+* **Property** - characteristics of a class (ex: length ot the aquarium)
+* **Method** - functionality of the class, i.e. what the object "could do" (ex: fill with water)
+* **Interface** - specification that a class can implement (ex: we could have an interface "Clean" that the aquarium class could implement. but other classes can also implement clean)
+
+### Visibility Modifiers:
+* **public** - default visibility in kotlin, visible to all
+* **private** - only visible inside the file where it lives
+* **internal** - only visible within the module
+
+**Module**: A set of kotlin files compiled together
+
+For more, see the [documentation on visibility modifiers](https://kotlinlang.org/docs/visibility-modifiers.html)
+
+### Classes 
+```kotlin
+class Aquarium {
+  // these are properties: 
+  val length = 60
+  val height = 20 
+  val width = 30 
+  
+  // aquariums generally care about volume for knowing how much water they need
+  // we could make a method on this class that calculates the volume: 
+  fun volume(): Int {
+      return width * height * length 
+  }
+  
+  // But, since the volume will be consistent for a given aquarium, 
+  // it makes more sense to have this also be a property value instead of a method
+  // this can be done like so:
+  val volumeAsProperty: Int
+      get() = return width * height * length
+  
+  // above we are overriding the default getter of this property 
+  // we can also override the setter, requiring us to define volume as a var
+  var volumeAsProperty2: Int 
+    get() = return width * height * length
+    set(value) {
+        // setters are passed "value" by convention but you can rename it
+        // setters need to edit one property, in this example we will change the height 
+        height = (value / (width * length))
+      // if we wanted to, we could make this setter private
+    }
+  
+}
+```
+#### Class Visibility: 
+* **public**: default, class and public members (any client who sees the class will also see it's members)
+* **private**: members are only visible *inside* the class, subclasses can't see private members
+* **protected**: members are only visible *inside* the class, but subclasses CAN see
+* **internal**: members are visible inside the module
+
 ## General / Other Useful Things to Know:
 ### String manipulation:
 Adding variables to strings can be done as such:
