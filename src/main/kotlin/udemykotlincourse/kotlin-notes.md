@@ -382,6 +382,31 @@ class Aquarium {
   
 }
 ```
+The above class is nice but it will take a lot of code to implement a class that had a different length, width, and height. 
+It would be better if we could make our class be more general, and take in these values as parameters so we can define 
+aquarium classes of all sizes. 
+
+```kotlin
+// we can also give these default values
+class Aquarium(length: Int, width: Int, height: Int = 100){
+  val length = length 
+  val width = width 
+  val height = height
+}
+
+// this is not best practice kotlin though, instead can do this: 
+class Aquarium(
+  var length: Int, 
+  var width: Int, 
+  var height: Int = 100
+){
+    // define other properties or methods here
+    // length, width, and height properties still exist on aquarium
+}
+// by using val or val on the constructor arguments, it creates the member properties for you and assigns the 
+// passed in or default values for you
+```
+
 #### Class Visibility: 
 * **public**: default, class and public members (any client who sees the class will also see it's members)
 * **private**: members are only visible *inside* the class, subclasses can't see private members

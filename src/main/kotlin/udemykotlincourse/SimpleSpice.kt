@@ -1,8 +1,6 @@
 package udemykotlincourse
 
-class SimpleSpice {
-    val name = "curry"
-    val spiciness = "mild"
+class SimpleSpice(val name: String, val spiciness: String) {
     val heat: Int
         get() = 5
 }
