@@ -5,7 +5,7 @@ class SimpleSpice(val name: String, val spiciness: String) {
         get() = 5
 }
 
-val sampleSpice = SimpleSpice()
+val sampleSpice = SimpleSpice("old bar", "low")
 
 fun main(){
     println("We are looking at spice: ${sampleSpice.name}")
