@@ -401,11 +401,47 @@ class Aquarium(
   var height: Int = 100
 ){
     // define other properties or methods here
-    // length, width, and height properties still exist on aquarium
+    // length, width, and height properties still exist on aquarium 
+   var volume : Int 
+   get() = width * height * length / 1000
+   set(value) { height = (value * 1000) / (width * length) }
+  
+  var water = volume * .9
 }
 // by using val or val on the constructor arguments, it creates the member properties for you and assigns the 
 // passed in or default values for you
 ```
+
+##### Defining your own constructor
+If you wanted to create a new way to build an aquarium (say by passing in the number of fish the tank has) you could do that by adding a new constructor to your aquarium class like so:
+```kotlin
+class Aquarium(var length: Int = 100, var width: Int = 20, var height: Int = 40) { 
+  var volume : Int
+    get() = width * height * length / 1000
+    set(value) { height = (value * 1000) / (width * length) }
+
+  var water = volume * .9
+  
+  // define a new constructor 
+  constructor(numberOfFish: Int): this() {
+      val water: Int = numberOfFish * 2000 // cm3
+      val tank: Double = water * water * 0.1
+      height = (tank / length * width).toInt()
+  }
+}
+
+// Now, if we wanted we could define an aquarium the old way like: 
+val myOldAquarium = Aquarium(length = 200, width = 30)
+// Or, we could just do the new way: 
+val myNewAquarium = Aquarium(numberOfFish = 15)
+// this values will be defined, just as they would on the old aquarium: 
+println("My new aquarium's height is: ${myNewAquarium.height}")
+println("My new aquarium's volume is: ${myNewAquarium.volume}") 
+
+// However, it's important to note you can not combine constructors:
+// this is not allowed: val myOldAndNewAquarium = Aquarium(numberOfFish = 10, width = 20) n
+```
+
 
 #### Class Visibility: 
 * **public**: default, class and public members (any client who sees the class will also see it's members)
