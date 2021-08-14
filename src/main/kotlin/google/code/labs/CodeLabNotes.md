@@ -123,6 +123,40 @@ Choose Code > Reformat Code.
 2. This will make sure the indenting is consistent, and it may reorder some of the XML of UI elements to group things, for example, putting all the android: attributes of one element together.
 
 
+#### Gradle 
+
+What's Gradle? 
+
+Gradle is the automated build system used by Android Studio. Whenever you change code, add a resource, or make other changes to your app, Gradle figures out what has changed and takes the necessary steps to rebuild your app. It also installs your app in the emulator or physical device and controls its execution.
+
+#### View Binding
+One way to access elements of a view is via `findViewById()`. This method let's you define a view, then access the view elements like so: 
+```kotlin
+// In the Activity 
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        
+        // get view 
+        val view = findViewById(R.layout.activity_main)
+        // then access elements of the view to make dynamic changes
+        view.myTextView.text = "update the text"
+        view.myViewBtn.setOnClickListener {
+            // set a listener
+        }
+        
+    }
+}
+```
+
+HOWEVER. Using `findViewById()` can be expense, especially as you have more views. A more scalable option is to use **view binding**
+
+
+
+
+-------------------------------------------------------------
 ## Unit 3: Navigation
 
 ### Part 1: Collections in Kotlin
