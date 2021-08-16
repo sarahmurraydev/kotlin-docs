@@ -151,10 +151,26 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-HOWEVER. Using `findViewById()` can be expense, especially as you have more views. A more scalable option is to use **view binding**
+HOWEVER. Using `findViewById()` can be expense, especially as you have more views. A more scalable option is to use **view binding**. 
 
+View binding requires a little more work upfront, but is a worthy investment if your app will contain multiple views. 
 
+### Part 2: Get User App Input -- Themes and UI Enhancements
 
+* A **style** is set of colors, looks, decorations on a view (ex: color of text, boldness, shadows, etc)
+* A **theme** is styling for the entire app, not just ONE view.
+
+A theme consists of a variety of colors that you can use throughout the app for various elements. Themes group colors into 12 groups to apply to various attributes. 
+![image](./theme-colors.png)
+
+To observe or edit the theme, go to the `theme.xml` file (app-> res -> values -> themes). To adjust the theme file, you need to define colors first in the `colors.xml`.
+
+**DARK THEME**
+
+To edit the theme for dark mode, change the file in res -> values-night -> `theme.xml`. *Why should you care about the dark theme?*
+> Dark themes reduce the luminance emitted by device screens […]. They help improve visual ergonomics by reducing eye strain, adjusting brightness to current lighting conditions, and facilitating screen use in dark environments — all while conserving battery power [for OLED displays].
+
+The above is from the android docs. See [here](https://medium.com/androiddevelopers/dark-theme-with-mdc-4c6fc357d956) for more on why and how to use dark theme.
 
 -------------------------------------------------------------
 ## Unit 3: Navigation
