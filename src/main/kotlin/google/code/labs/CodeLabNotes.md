@@ -267,9 +267,10 @@ How to add a RecyclerView:
 1. Add the XML component in your activity in a view group
    > 
    > ```xml
+   > <!-- don't use match_parent for recyclerview otherwise each item will take up the full screen -->
    >  <androidx.recyclerview.widget.RecyclerView
    >    android:id="@+id/recycler_view"
-   >    android:layout_width="match_parent"
+   >    android:layout_width="wrap_content"
    >    android:layout_height="match_parent"
    >    android:scrollbars="vertical"
    >    app:layoutManager="LinearLayoutManager" />
@@ -318,7 +319,21 @@ An adpater has multiple parts:
         * `onCreateViewHolder()`: called by the layout manager to create new ViewHolders when there are no existing view holders to be used.  
         * `onBindViewHolder()`: called by layout manager to replace the contents of a list item view. 
           
-Note: `onCreateViewHolder` will use a layout inflater. Layout Inflater   
+Note: `onCreateViewHolder` will use a layout inflater. Layout Inflater
+
+* 2e. Add the set up the recyclerview in your activity: 
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val data = DataSource().loadData()
+        val myRecyclerView = findViewById<RecyclerView>(R.id.recyclerview)
+        myRecyclerView.adapter = ItemAdapter(this, data)
+    }
+}
+```
 
 -------------------------------------------------------------
 ## Unit 3: Navigation

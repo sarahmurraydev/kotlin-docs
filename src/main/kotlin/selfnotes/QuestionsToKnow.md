@@ -57,7 +57,7 @@
 
 ## XML
 * What are prefixes on XML attributes such as `xmlns` or `app`?
-  > These prefixes are known as namespaces. Namespaces help associate attributes with a given item: XML, android, the app, tools, etc. Namespaces serve two purposes. 1) To distinguish between attritbutes of the same name and 2) to allow attributes that affect the same space to be grouped together.
+  > These prefixes are known as namespaces. Namespaces help associate attributes with a given item: XML, android, the app, tools, etc. Namespaces serve two purposes. 1) To distinguish between attributes of the same name and 2) to allow attributes that affect the same space to be grouped together.
 * What should you set the width of an element within a constraint layout?
   > `match_parent` cannot be used in a constraint layout. Instead, developers should use `0dp` to mean "match the constraints"
   
