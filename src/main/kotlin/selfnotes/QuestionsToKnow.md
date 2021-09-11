@@ -2,9 +2,11 @@
 
 ## Kotlin 
 * What's the difference between a class and abstract class? What's the difference between a class and an interface?
+* What is the `vararg` modifier? How is it used?
 
 ## Android 
 * What's view binding? Why should you use it?  
+* What package name is data usually stored in?
   
 ## XML
 * What are prefixes on XML attributes such as `xmlns` or `app`?
@@ -18,6 +20,7 @@
 ## Kotlin
 * What's the difference between a class and abstract class? What's the difference between a class and an interface?
 > 
+
 
 ## Android
 * What's view binding? Why should you use it?

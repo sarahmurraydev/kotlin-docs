@@ -170,7 +170,126 @@ To observe or edit the theme, go to the `theme.xml` file (app-> res -> values ->
 To edit the theme for dark mode, change the file in res -> values-night -> `theme.xml`. *Why should you care about the dark theme?*
 > Dark themes reduce the luminance emitted by device screens […]. They help improve visual ergonomics by reducing eye strain, adjusting brightness to current lighting conditions, and facilitating screen use in dark environments — all while conserving battery power [for OLED displays].
 
-The above is from the android docs. See [here](https://medium.com/androiddevelopers/dark-theme-with-mdc-4c6fc357d956) for more on why and how to use dark theme.
+The above is from the android docs. See [here](https://medium.com/androiddevelopers/dark-theme-with-mdc-4c6fc357d956) 
+for more on why and how to use dark theme. Also, check out
+[this suggested practice lab](https://github.com/material-components/material-components-android-examples/blob/develop/MaterialThemeBuilder/README.md) 
+for making your own material theme.
+
+### Part 3: Display a Scrollable List 
+
+A `List` is a collection of items with a specific order.
+
+Kotlin has two types of lists: 
+* `List`: read only; cannot be modified 
+* `Mutable List`: can be modified after you create it. 
+
+You can create a list by `listOf(1, 2, ..)` or `mutableListOf("hello", "world")`. If you want to make an empty list (esp
+an empty mutable list if you are planning to add elements to it later), then you need to define the type of elements in 
+the list when you declare it.  ex: `val mutList = mutableListOf<String>()`
+
+Note: the index of a list is actually the offset of an element from the first element. For example, if you have a list like so: 
+> val letters = listOf("a", "b", "c", "d"). 
+
+Then `letters[2]` means return the element that is two spots from the first element, aka the third element. 
+> letters[0] = a  // return the letter 0 elements from the first element ==> return the first element
+> letters[1] = b  // return the letter 1 element from the first elemet 
+> letters[2] = c  // return the letter 2 elements from the first element 
+> letters[3] = d  // return the letter 3 elements from the first element 
+
+Looping through lists: 
+
+You can use both `while` and `for` loops to loop through items in a list. Here are some examples of unique was to use for loops:
+```kotlin
+// Note: Here are some other variations of what you can do with for loops, including using them with ranges with specific steps (instead of incrementing by 1 each time).
+
+for (item in list) print(item) // Iterate over items in a list
+
+for (item in 'b'..'g') print(item) // Range of characters in an alphabet
+
+for (item in 1..5) print(item) // Range of numbers
+
+for (item in 5 downTo 1) print(item) // Going backward
+
+for (item in 3..6 step 2) print(item) // Prints: 35
+
+// You can find more in the documentation listed at the end of this codelab.
+```
+
+`vararg`: you can use vararg when you have a method that takes in the same type of parameter n times. 
+```kotlin
+// ex if you have a method like so: 
+class Pizza(
+    val topping1: String, 
+    val topping2: String,
+    val topping3: String
+)
+
+// you can rewrite it like so: 
+class Pizza(val toppings: List<String>)
+
+// and even further rewrite it like:
+class Pizza(vararg toppings: String)
+```
+
+Recyclerview: saves CPU by refilling containers on the screen as the user scrolls. 
+![recyclerview_visual](./recyclerview-visual.png)
+
+_Setting Up Data_
+
+Data in android apps is usually kept in a class contained in a package called `model`
+
+```
+project
+│   README.md
+│   build.gradle.kts    
+|
+└───app
+│   └───src
+|       └───main
+|           | AndroidManifest.xml
+│           └───java
+|           |   └───com.projectname
+|           |       | ProjectActivity.kt
+│           |       └─── **com.projectname.model**
+│           └───res
+```
+
+Data that your app is *ready to consume/render* should be stored in this package. However, sometimes you will need to 
+load and process data from some data source *before* your app can render it in the format you want.  You should make a 
+`Data Source` class in a `data` package that handles loading and transforming data. 
+
+RecyclerView contains 3 parts: 
+* Items held in the recyclerview 
+* Adapter - takes data and prepares it for a recyclerview
+* View Holder - a pool of views for the recyclerview to use and display affirmations
+
+How to add a RecyclerView: 
+1. Add the XML component in your activity in a view group
+   > 
+   > ```xml
+   >  <androidx.recyclerview.widget.RecyclerView
+   >    android:id="@+id/recycler_view"
+   >    android:layout_width="match_parent"
+   >    android:layout_height="match_parent"
+   >    android:scrollbars="vertical"
+   >    app:layoutManager="LinearLayoutManager" />
+   > ```
+   > The XML of a RecyclerView should have a `layoutManager`. This manager handles how to display the items (ex: linearly or a grid). Some popular ones are `GridLayoutManager`, `LinearLayoutManager`, `StaggeredGridLayoutManager`.
+   > <br>
+   > <br>
+   > To be able to scroll on a RecyclerView, add the following field: 
+   > `android:scrollbars="vertical"`
+   
+2. Implement an Adapter: 
+> Your app needs something to take data from the source and format it so each item can be displayed on the recyclerview. 
+> An **Adapter** is a deign pattern that **adapts** data for this purpose. The recylcerview uses an adapter to figure out how to display data on the screen
+
+A Note on RecyclerView Adapter and how things work: 
+> When you run the app, RecyclerView uses the adapter to figure out how to display your data on screen. RecyclerView asks the adapter to create a new list item view for the first data item in your list. Once it has the view, it asks the adapter to provide the data to draw the item. This process repeats until the RecyclerView doesn't need any more views to fill the screen. If only 3 list item views fit on the screen at once, the RecyclerView only asks the adapter to prepare those 3 list item views (instead of all 10 list item views).
+> Via [link](https://developer.android.com/codelabs/basic-android-kotlin-training-recyclerview-scrollable-list?authuser=1&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-2-pathway-3%3Fauthuser%3D1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-recyclerview-scrollable-list#3)
+
+An adpater has multiple parts: 
+
 
 -------------------------------------------------------------
 ## Unit 3: Navigation
@@ -237,7 +356,12 @@ There are a lot of commands you can run on collections such as `map`, `filter`, 
 
 Recall Lambdas and Higher Order Functions: 
 
-**Lambda**: A function with no name. ex: `peopleAges.forEach { print("${it.key} is ${it.value}") }`
-**Higher Order Function**: passing a function to another function, or returning a function from another function. ex: `map, forEach, filter`
+* **Lambda**: A function with no name. 
+   * ex: `peopleAges.forEach { print("${it.key} is ${it.value}") }`
+* **Higher Order Function**: passing a function (a lambda) to another function, or returning a function from another function. 
+  * ex: `map, forEach, filter`
+   
+   
+
 
 ### Part 2: Activities and Intents:
