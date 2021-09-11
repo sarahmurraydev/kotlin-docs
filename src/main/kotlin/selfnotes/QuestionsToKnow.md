@@ -7,6 +7,13 @@
 ## Android 
 * What's view binding? Why should you use it?  
 * What package name is data usually stored in?
+  ### RecyclerViews
+* What are the 3 parts of a recycler view
+* What steps do you need to take to implement a recyclerview
+* What is a layout inflater
+* Why and When should you set a fixed size to your recyclerview?
+* What type of width and height should you set for your recyclerview?
+
   
 ## XML
 * What are prefixes on XML attributes such as `xmlns` or `app`?
@@ -41,6 +48,12 @@
   ```
   
 * What's view binding vs data binding?
+
+* When and why should you set a fixed size to your recyclerview?
+> You should set a fixed size to your recyclerview when the data being shown in that recyclerview will not change sizes dyanmically. For example, if you are displaying a list of items you've coded into your app then the data source lives in the client side code and will not change dynamically (it will only change if a new item is added to the data source & the app is rebuilt). If you are pulling data from an API however you may not want to set this value (esp if you make the call multiple times in the app's lifecycle or you allow users to pop items off the list). This value is used to improve performance.
+
+* What type of width and height should you set for your recyclerview?
+> Be careful with `match_parent`. If you have `match_parent` for the height of a list item and your list is being displayed linearly, the item will take the height of the whole screen. The same issue can happen if you are using a other layout designs.  
 
 ## XML
 * What are prefixes on XML attributes such as `xmlns` or `app`?

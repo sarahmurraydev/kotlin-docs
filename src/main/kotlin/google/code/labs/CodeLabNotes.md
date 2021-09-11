@@ -289,7 +289,36 @@ A Note on RecyclerView Adapter and how things work:
 > Via [link](https://developer.android.com/codelabs/basic-android-kotlin-training-recyclerview-scrollable-list?authuser=1&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-2-pathway-3%3Fauthuser%3D1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-recyclerview-scrollable-list#3)
 
 An adpater has multiple parts: 
+* 2a. create an XML element for whatever item your recyclerview is holding 
+* 2b. create an `ItemAdapter` class
+  > ```kotlin
+  > import com.example.affirmations.model.Affirmation
+  > 
+  > class ItemAdapter(
+  >    private val context: Context, 
+  >    private val dataset: List<Affirmation>
+  > ) {
+  > }
+ * 2c.  Create a view holder:
+> You can add this in the adapter class (aka nested class) bc it will only be used by the adapter:
+> ```kotlin
+> class ItemAdapter(
+>    private val context: Context,
+>    private val data: List<Affirmation>
+>   ) {
+> 
+>     class ItemViewHolder(private val view: View)
+> }
 
+* 2d. Connect the view holder and adapter. 
+    * Make your adapter class extend the `RecyclerView.Adapter` class 
+    * List you view holder class as the view holder type
+    * Implement the abstract methods associated with extending `RecyclerView.Adapter`: 
+        * `getItemCount()`: returns size of your data set
+        * `onCreateViewHolder()`: called by the layout manager to create new ViewHolders when there are no existing view holders to be used.  
+        * `onBindViewHolder()`: called by layout manager to replace the contents of a list item view. 
+          
+Note: `onCreateViewHolder` will use a layout inflater. Layout Inflater   
 
 -------------------------------------------------------------
 ## Unit 3: Navigation
