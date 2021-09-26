@@ -404,8 +404,88 @@ Recall Lambdas and Higher Order Functions:
    * ex: `peopleAges.forEach { print("${it.key} is ${it.value}") }`
 * **Higher Order Function**: passing a function (a lambda) to another function, or returning a function from another function. 
   * ex: `map, forEach, filter`
-   
-   
 
 
 ### Part 2: Activities and Intents:
+We'll build an app with multiple activities and navigate between them using intents. 
+
+#### Intents: 
+An *intent* is an object representing some action to be performed, or a set of instructions. The most common intent is to launch an activity.
+Another example is sending users to another app. There are two types of intents: 
+
+1. Explicit: highly specific, where you know the activity to be launched (often a screen in your app)
+2. Implicit: more abstract, you tell the system the type of action (ex: openning a link, composing an email, making a phone call) and the system figures out how to fulfill the request.   
+
+Intents, both implicit and explicit, describe the request and not the actual result. 
+
+Explicit intents are for navigation to activities in your app. Implicit intents might be used for a screen like this that will rely on other apps: 
+![implicit-intent](./Implicit-Intent-Example.png)
+
+##### You can pass data with your intent.
+Recall an intent is just a set of instructions. There is no instance of you destination (activity or app) yet. You can send data but telling the intent to "put (an) extra (piece of data)" on the instructions. 
+```kotlin
+val intent = Intent(context, MyIntentActivity::class.java)
+// you can put all kinds of variables on the intent
+intent.putExtra("mydata", "testData")
+intent.putExtra("year", 2021)
+intent.putExtra("testArray", arrayOf(true, false))
+context.startActivity(intent) // makes our actual instance of the new activity
+```
+To access this data in your new intent you just make a call to the bundle of the intent: 
+```kotlin
+val data = intent.getStringExtra("mydata")
+// or 
+val data = intent?.extras.getString("mydata")
+// Note: in either way, data will be nullable so you need to handle the case it is `null`
+```
+
+#### Menus 
+Menus are ways to add navigation or app element related actions in a place easily accessible to the user. 
+To add a menu, define the XML of the menu in `res/menu` directory, then inflate the menu into the view in your activity (by overriding the `onCreateOptionsMenu` method)
+
+1. Define menu XML: 
+```xml
+<!-- define this in res/menu directory-->
+        <?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/action_switch_layout"
+          android:title="@string/action_switch_layout"
+          android:icon="@drawable/ic_baseline_view_list_24"
+          app:showAsAction="always" />
+</menu>
+```
+> Elements on a menu are called `items`. Menus can have multiple items. 
+
+2. Inflate menu in activity: 
+```kotlin
+override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+   menuInflater.inflate(R.menu.layout_menu, menu)
+
+   val layoutButton = menu?.findItem(R.id.action_switch_layout)
+    // you can set these elements in the XML or dynamically here
+   menu.setIcon = ContextCompat.getDrawable(this, R.drawable.ic_icon)
+
+   return true
+}
+```
+
+3. Handle Click events
+```kotlin
+// menu item's click events can be handled by overiding the `onOptionsItemSelected` method and using a when block handling what happens WHEN each item is clicked
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    // Handle item selection
+    return when (item.itemId) {
+        R.id.new_game -> {
+            newGame()
+            true
+        }
+        R.id.help -> {
+            showHelp()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
+}
+```
+

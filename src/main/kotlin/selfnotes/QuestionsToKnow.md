@@ -32,7 +32,7 @@
 ## Android
 * What's view binding? Why should you use it?
   > View binding is a way to select and dynamic adjust elements of a view. You should use it over `findViewById()` because it is less expensive and more scalable. With viewbinding, views are bound to one binding object which contain references to all elements within a few. On the otherhand, using  `findViewById`, you would need to call this method everytime you wanted to adjust ONE element on the screen. If you wanted to adjust another element, you'd need to call this method again. See the image below for more context. 
-  > ![](./viewbindvsfindviewbyid.png)
+  > ![](./images/viewbindvsfindviewbyid.png)
   > View binding also prevents the need for variables associated with the view, saving more space/CPU
   ```kotlin 
   // Old way with findViewById()
