@@ -1,10 +1,16 @@
 # Vocab 
 
-## A 
+## A
 
 ### ACTION_VIEW
 > A generic intent that takes in a URI. Kdoc calls it "the most common action performed on data -- it is the generic action you can use on a piece of data to get the most reasonable thing to occur"
-> Examples of uses include passing a URL for a webview to open, passing a `mailto` or `tel` URI. 
+> Examples of uses include passing a URL for a webview to open, passing a `mailto` or `tel` URI.
+
+### Activity
+> Single, focused thing that the user can do. Class that creates a window for you in which you can place your app's UI. Almost all activities interact with the user. 
+>
+> The activity lifecycle drives the various UI states of your application. Almost all activities will handle `onCreate` and `onPause` methods. Each app should have at least one activity and it should be defined in the XML. 
+> 
 
 ### Adapter 
 > An element of code necessary for a recyclerview. The adapter makes view holders and runs operations when those view holders are bound to the parent group. 
@@ -12,6 +18,9 @@
 ## B 
 
 ## C 
+
+### Compile Time Constant 
+> variables in kotlin defined with the `const` keyword are *compile time constants*, meaning their value won't change.
 
 ### Control Flow (Kotlin)
 > Control flow is the order in which a computer executes statements in a script. 
@@ -24,6 +33,16 @@
 ## E 
 
 ## F 
+### Fragments 
+> Fragments are a subclass of `Activity` and a reusable portion of your app's UI. 
+> Fragments can be used to better modularize code and allow for better scaling.
+> 
+> Fragments **must** be hosted by an activity or another fragment.
+> Fragment view hierarchy becomes attached to the host's view hierarchy.
+> 
+> Fragments are for modular UI (so you can add, remove, rearrange and duplicate these components anywhere and keep track
+> of them in the backstack). With this is mind fragments should only contain the information they need for their 
+> piece of the UI and you should *not* modify one fragment from another
 
 ## G 
 
@@ -45,6 +64,32 @@
 ## K 
 
 ## L 
+### Lifecycle 
+> You should be able to name all lifecycle states (5) and methods (at least 8)
+> Fill out this chart: 
+> ```markdown
+>  -----------------------------
+> |           State 4           | // activity visible and focuses 
+>  -----------------------------
+>            ^                |
+>   method 4 |       method 5 |
+>            |                v
+>  -----------------------------
+> |           State 3           | // activity visible 
+>  -----------------------------
+>            ^                |
+>   method 2 |      method 6  |
+>   method 3 |                v
+>  ------------------------------
+> |           State 2            |
+>  ------------------------------
+>            ^                |
+>   method 1 |       method 7 |
+>            |                v
+>  -------------    -------------
+> |   State 1   |  |   State 5   |
+>  -------------    -------------
+>  ```
 
 ### Lambda 
 > A function with no name

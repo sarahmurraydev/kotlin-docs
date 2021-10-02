@@ -489,3 +489,115 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
 }
 ```
 
+### Part 4: Stages of the Activity Lifecycle
+
+#### Using Logcat 
+You can add logs to see what's happening in logcat like so: 
+```kotlin
+log.d("MainActivity", "onCreate called")
+// you can also predefine tags and pass them in 
+val TAG = "MainActivity"
+log.d(TAG, "onCreate called")
+```
+Then, you can search logcat for these tags. Searching `D/` will bring up all debug tags aka tags made with `log.d`. Other log types include: 
+
+| log function | log type | 
+| --- | ---| 
+| `log.d()` | debug logs | 
+| `log.i()` | informational messages | 
+| `log.e()` | errors | 
+| `log.w()` | warnings | 
+| `log.v()` | verbose messages | 
+
+#### Lifecycle 
+The order of events that can occur for an android application. There are approximately 5 different lifecycle states 
+```
+ -----------------------------
+|           Resumed           | // activity visible and focuses 
+ -----------------------------
+           ^                |
+  onResume |        onPause |
+           |                v
+ -----------------------------
+|           Started           | // activity visible 
+ -----------------------------
+           ^                |
+   onStart |        onStop  |
+onRestart* |                v
+ ------------------------------
+|           Created            |
+ ------------------------------
+           ^                |
+  onCreate |      onDestroy |
+           |                v
+ -------------    -------------
+| Initialized |  |  Destroyed  |
+ -------------    -------------
+ ```
+
+It's important to know when your app will be in a certain state or lifecycle method. For example, let's define some user interactions and detail what lifecycle method your app is in in each moment. 
+
+| User Interaction | Method Called | Starting State | Ending State |
+| --- | --- | --- | --- |
+| User opens your app | onCreate | Initialized |  Create |
+|                     | onStart  | Created | Started |
+|                     | onResume | Started | Resumed |
+|  | | |   |         
+| User hits home button | onPause | Resumed |  Started |
+|                       | onStop | Started |  Created |
+|  | | |   | 
+| User reopens app | onRestart | Created |  Started | 
+|                  | onResume | Started |  Resumed |
+|  | | |   | 
+| User kills the app | onPause | Resumed |  Started |
+|                   | onStop | Started |  Created |
+|                   | onDestroy | Created |  Destroyed |
+
+As you can see from the table above, applications do not often stay in the `created` or `started` states. 
+Other methods are usually immediately invoked in these states. One example of a user staying in `started` would be if 
+some type of bottom sheet has been launched over the main activity. In this case, the main activity is still visible but not in focus.
+ 
+Order in which methods are called: 
+1. OnCreate & 2. onStart & 3. onResume  (Initialized -> Created --> Started --> Resumed)
+4. onPause & 5. onStop (Resumed --> Started --> Created)
+6. onRestart & 7. onResume (Created -> Started -> Resumed)
+8. onPause & 9. onStop & 10. onDestory (Resumed --> Started --> Created --> Destroy)
+
+Another valid flow is: 
+1. onCreate & 2. onStart & 3. onResume (happen simultaneously)
+3. onPause  & 4. onStop
+5. onDestroy
+this would happen if a user opens the app (create, start, resume), hits the home button (pause, stop), then later kills the app without re-entering it (destory).
+
+Questions: 
+1. Will onStart always be called immediately after onCreate? 
+    - yes 
+2. Will onStop always be called immediately after onPause? 
+    a. is there any decernable UI change between these states?
+        - Sometimes. The UI is only decrenable between the `Started` and `Resumed` states in the concept of a "multi-window" mode, 
+          when uses might have mutliple activities on their screen at one time. One example of this would be split screen 
+          on an android device, or launching a bottom sheet for sharing a link out.  
+        - This is why the difference between Resume & Start is that in resume state, the activity has *focus* so a user has "clicked" on that activity for example.
+
+#### Lifecycle Methods
+* `onCreate()` to create the app.
+* `onStart()` to start it and make it visible on the screen.
+* `onResume()` to give the activity focus and make it ready for the user to interact with it.
+    * Despite the name, the onResume() method is called at start up, even if there is nothing to resume.
+* `onPause()` caused when the activity loses focus (ex: link sharing bottom sheet is launched) 
+    * Keep the code in here light, this method runs quickly and also blocks other things from displaying
+    * You should **not** save application or user data, make network calls, or execute database transactions here as they might not complete before the method does
+
+
+#### Navigating Between Activities 
+Activities will sometimes start other activities. This is a common navigation occurance, or app flow. Sometimes, 
+you might `startActivityForResult` and listen for that result in your first activity. It's important to note that 
+the transition from one activity to another causes each activities' lifecycles to overlap. 
+This process is well defined, for example let's say Activity A is responsible for starting Activity B, then:
+
+ 1. **Activity A**'s `onPause()` method executes.
+ 2. **Activity B**'s `onCreate()`, `onStart()`, and `onResume()` methods execute in sequence. (Activity B now has user focus.)
+ 3. Then, if **Activity A** is no longer visible on screen, its `onStop()` method executes.
+
+#### TODO: Notes on Saved Instance State & Configuration Changes: 
+https://developer.android.com/codelabs/basic-android-kotlin-training-activity-lifecycle?authuser=1&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-3-pathway-1%3Fauthuser%3D1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-activity-lifecycle#4 
