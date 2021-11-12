@@ -336,7 +336,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 -------------------------------------------------------------
-## Unit 3: Navigation
+## Unit 3: Navigation: Navigate Between Screens
 
 ### Part 1: Collections in Kotlin
 **Collections:** are a group of related items, like a list of words, or a set of employee records. The collection can be ordered or unordered. One type of collection is a list
@@ -601,3 +601,12 @@ This process is well defined, for example let's say Activity A is responsible fo
 
 #### TODO: Notes on Saved Instance State & Configuration Changes: 
 https://developer.android.com/codelabs/basic-android-kotlin-training-activity-lifecycle?authuser=1&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-3-pathway-1%3Fauthuser%3D1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-activity-lifecycle#4 
+
+
+Google Docs on Intents, Lifecycle, Configuration etc:
+* https://developer.android.com/reference/android/app/Activity#ActivityLifecycle
+* https://developer.android.com/reference/android/app/Activity#configuration-changes
+* https://developer.android.com/guide/components/activities/activity-lifecycle
+
+
+## Unit 3: Navigation: Navigation Component 
