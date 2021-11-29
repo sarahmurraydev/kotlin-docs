@@ -22,6 +22,11 @@
 ### Compile Time Constant 
 > variables in kotlin defined with the `const` keyword are *compile time constants*, meaning their value won't change.
 
+### Configuration Change 
+> A configuration change happens when the state of the device changes so radically that the easiest way for the system to resolve the change is to completely shut down and rebuild the activity.
+> 
+> Ex: user changes language, device is rotated, etc. 
+
 ### Control Flow (Kotlin)
 > Control flow is the order in which a computer executes statements in a script. 
 > Code is run in order from first line to last line except in structures that change the control flow such as conditionals and loops
@@ -45,6 +50,10 @@
 > piece of the UI and you should *not* modify one fragment from another
 
 ## G 
+### Garbage Collection 
+> Garbage collection refers to the automatic cleanup of objects that you'll no longer use.
+> 
+> Ex: After `onDestroy()` is called, the system knows that those resources are discardable, and it starts cleaning up that memory.
 
 ## H
 ### Higher Order Functions 

@@ -3,6 +3,8 @@
 ## Kotlin 
 * What's the difference between a class and abstract class? What's the difference between a class and an interface?
 * What is the `vararg` modifier? How is it used?
+* What's a primitive? 
+* What are scope functions in Kotlin? How many are there?
 
 ## Android 
 * What's view binding? Why should you use it?  
@@ -13,7 +15,10 @@
 * What is a layout inflater
 * Why and When should you set a fixed size to your recyclerview?
 * What type of width and height should you set for your recyclerview?
-
+  ### Third Party Library 
+* What are libraries that allow you to pull data from the internet? 
+* What libraries allow you to load image URIs on android devices?
+  
   
 ## XML
 * What are prefixes on XML attributes such as `xmlns` or `app`?
@@ -28,6 +33,19 @@
 * What's the difference between a class and abstract class? What's the difference between a class and an interface?
 > 
 
+* What's a primitive? 
+  > A primitive type in coding languages is a type that is either: 1) built into a programming language or 2) one that 
+  > could be characterized as the basic structure for building more sophisticated data types. 
+  > Another way to think of it is primitive data types can not be broken down into other data types. Integers, floating point numbers, and characters are primitives. 
+  > In many languages strings are considered primitives but only because the language has added support for them to be 
+  > so since technically strings can be broken down into characters 
+
+* What are scope functions in Kotlin? How many are there?
+> Sole purpose is to execute a block of code within the context of a kotlin object. When you call such a method on an object
+> the lambda expression provided forms a temporary scope so that you can access the object without its name.
+> 
+> There are 5 scope functions in kotlin: `let`, `run`, `with`, `apply`, `also`.
+> For more on scope functions and when to use each one: https://kotlinlang.org/docs/scope-functions.html#function-selection 
 
 ## Android
 * What's view binding? Why should you use it?
@@ -53,7 +71,15 @@
 > You should set a fixed size to your recyclerview when the data being shown in that recyclerview will not change sizes dyanmically. For example, if you are displaying a list of items you've coded into your app then the data source lives in the client side code and will not change dynamically (it will only change if a new item is added to the data source & the app is rebuilt). If you are pulling data from an API however you may not want to set this value (esp if you make the call multiple times in the app's lifecycle or you allow users to pop items off the list). This value is used to improve performance.
 
 * What type of width and height should you set for your recyclerview?
-> Be careful with `match_parent`. If you have `match_parent` for the height of a list item and your list is being displayed linearly, the item will take the height of the whole screen. The same issue can happen if you are using a other layout designs.  
+> Be careful with `match_parent`. If you have `match_parent` for the height of a list item and your list is being displayed linearly, the item will take the height of the whole screen. The same issue can happen if you are using a other layout designs.
+
+### Third Party Libraries 
+* What are libraries that allow you to pull data from the internet?
+> Retrofit, OkHTTP  
+
+* What libraries allow you to load image URIs on android devices?
+  > Picasso, Glide, and Coil are all libraries that allow you to load image resources. Coil is the newest and gaining popularity because it was written by and for kotlin.
+    https://proandroiddev.com/coil-vs-picasso-vs-glide-get-ready-go-774add8cfd40
 
 ## XML
 * What are prefixes on XML attributes such as `xmlns` or `app`?

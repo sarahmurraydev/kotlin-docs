@@ -587,7 +587,10 @@ Questions:
 * `onPause()` caused when the activity loses focus (ex: link sharing bottom sheet is launched) 
     * Keep the code in here light, this method runs quickly and also blocks other things from displaying
     * You should **not** save application or user data, make network calls, or execute database transactions here as they might not complete before the method does
+* `onStop` -- app is no longer visible on screen, but is not fully shut down (running in background, can see in recent apps)
+* `onDestroy()` - the activity is fully shut down and resources can be garbage collected
 
+Note: `onCreate` and `onDestroy` are only called ONCE in your app's activity instance's lifetime. `onCreate` to initialize the instance and `onDestroy` to clean up resources used by your app. 
 
 #### Navigating Between Activities 
 Activities will sometimes start other activities. This is a common navigation occurance, or app flow. Sometimes, 
@@ -599,8 +602,48 @@ This process is well defined, for example let's say Activity A is responsible fo
  2. **Activity B**'s `onCreate()`, `onStart()`, and `onResume()` methods execute in sequence. (Activity B now has user focus.)
  3. Then, if **Activity A** is no longer visible on screen, its `onStop()` method executes.
 
-#### TODO: Notes on Saved Instance State & Configuration Changes: 
-https://developer.android.com/codelabs/basic-android-kotlin-training-activity-lifecycle?authuser=1&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-3-pathway-1%3Fauthuser%3D1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-activity-lifecycle#4 
+#### Notes on Saved Instance State & Configuration Changes: 
+
+*Configuration Change*: 
+> A configuration change happens when the state of the device changes so radically that the easiest way for the system to resolve the change is to completely shut down and rebuild the activity.
+> 
+> Ex: user changes device language (layout size might need to change to accommodate new text size), device is rotated, etc. 
+
+If you were to open an android app with logs at each activity life cycle method, and then rotate the device you would expect to see the following logs: 
+```
+2020-10-16 11:03:09.618 23206-23206/com.example.android.dessertclicker D/MainActivity: onCreate Called
+2020-10-16 11:03:09.806 23206-23206/com.example.android.dessertclicker D/MainActivity: onStart Called
+2020-10-16 11:03:09.808 23206-23206/com.example.android.dessertclicker D/MainActivity: onResume Called
+2020-10-16 11:03:24.488 23206-23206/com.example.android.dessertclicker D/MainActivity: onPause Called
+2020-10-16 11:03:24.490 23206-23206/com.example.android.dessertclicker D/MainActivity: onStop Called
+2020-10-16 11:03:24.493 23206-23206/com.example.android.dessertclicker D/MainActivity: onDestroy Called
+2020-10-16 11:03:24.520 23206-23206/com.example.android.dessertclicker D/MainActivity: onCreate Called
+2020-10-16 11:03:24.569 23206-23206/com.example.android.dessertclicker D/MainActivity: onStart Called
+```
+Meaning as the device is rotated the system shuts down and then creates a new activity. This will cause the activity to start back up with default values for any variables stored there. 
+To avoid data mis-matches in this case, you should save data to a bundle known as the `InstanceState`. You can do this with the method `onSaveInstanceState()`
+
+*Save Instance Data*
+`onSaveInstanceState()` can be thought of as safety measure for important app data that needs to persist despite configuration changes. This method is called after your activity has been stopped. (onPause --> onStop --> onSavedInstanceState)
+
+*Restoring Data*
+The app's data can be restored in either `onCreate()` or via `onRestoreInstanceState()`
+
+1. In `onCreate` looks like this: 
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    if (savedInstanceState != null) {
+        // set the values you need to set from the bundle or for other non-initializing activity things
+    }
+}
+```
+
+2. `onRestoreInstanceState()` is it's own method that runs after the `onStart` phase of the lifecycle. To use it, just override it like all other lifecycle methods.
+    * it's only called when recreating an activity, not if onStart is called for any other reason
+
+When to use `onCreate` vs `onRestoreInstanceState()`
+* most times you will likely just use `onCreate` to restore state and check the bundle
+* use `onRestoreInstanceState` if you need to do some work AFTER all the initialization has been done or to give power to subclasses to restore as they want. 
 
 
 Google Docs on Intents, Lifecycle, Configuration etc:
@@ -609,4 +652,164 @@ Google Docs on Intents, Lifecycle, Configuration etc:
 * https://developer.android.com/guide/components/activities/activity-lifecycle
 
 
-## Unit 3: Navigation: Navigation Component 
+## Unit 3: Navigation: 
+## Section 2 Navigation Component 
+
+### Part 1: Navigation Component Architecture
+Navigation Component: A collection of libraries, a plugin, and tooling for unifying and simplyfing Android Navigation. 
+
+Navigation Component consists of 3 pieces: 
+1. Navigation Graph 
+2. NavHost 
+3. NavController
+
+#### 1. Navigation Graph
+The Navigation Graph is an XML resource that contains what I call, the metadata, of your app's navigation. In this file 
+you will include all the screens that users can be navigated to, the connections of these screens. You can also define 
+parameters (safe args) to pass between screens here and create and assign transitions for smoother navigation UI
+
+#### 2. NavHost 
+Basically a fragment window that will swap out different pieces of your navigation. 
+
+#### 3. NavController
+Manages navigation within a NavHost. Each NavHost has a cooresponding NavController. This is what actually instructs the navigation to occur (hence "controls" the navigation) 
+
+
+How to add the navigation component to your app: 
+1. Add the dependencies you need. 
+   ```gradle
+   implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
+   implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
+   ```
+2. Create a navgraph of the navigation flows between fragments / activities in your app. (Touch an XML file at `res/navigation/nav_graph.xml`)
+    * Add destinations 
+    * Be sure to add a default destination 
+3. Add your NavHost 
+    * you can define it in either the XML or in your activity 
+    * if defining it in your activity, be sure to make sure it persists despite configuration changes (ex: rotation)
+4. Add a NavController    
+5. Define navigation events based on other user actions (ex: clicks)
+```kotlin
+override fun onClick(view: View) {
+    val action = FragmentDirections.actionAmountFragmentToConfirmationFragment()
+    view.findNavController().navigate(action)
+}
+```
+
+### Gotchas with Nav Component: 
+Watch out for configuration changes (ex: rotations) affecting your navigation. In the past I've seen users dropped back 
+on the start destination when the device is rotated because the `navControler.setGraph` method was called in every `onCreate` 
+when it should only be called once. To do this, wrap the call around a savedInstanceState check. Ex: 
+```kotlin
+internal class MyActivity : Activity() {
+    override fun onCreate(savedInstanceState: Bundle) {
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        val navController = navHostFragment.navController
+        
+        if (savedInstanceState == null) {
+            navController.setGraph(R.navigation.nav_graph)
+        }
+    }
+}
+```
+
+### Part 2: Fragments and the Navigation Component
+
+#### Fragment Lifecycle: 
+Recall fragments are for building modular UIs. They represent a piece of code to be displayed to the user that may also handle user interactions. 
+One activity may host multiple fragments at a time but each fragment must be tied to an activity. Fragments manage their own lifecycles which are similiar to activity lifecycles. 
+
+Fragment lifecycle has the same 5 states as the activity lifecycle: `INITIALIZED`, `CREATED`, `STARTED`, `RESUMED`, `DESTROYED`
+The difference between the two is the methods associated with these states, the `CREATED` state and `DESTROYED` state have some unique methods to them compared to activities.
+![image](./fragment-lifecycle-methods.png)
+
+The methods `onStart`, `onPause`, `onResume`, `onStop`, and `onDestroy` are the same as the activity cycle. 
+The following methods are new or different:
+* `onCreate()`: The fragment has been instantiated and is in the CREATED state. However, its corresponding view has not been created yet.
+* `onCreateView()`: This method is where you inflate the layout. The fragment has entered the CREATED state.
+* `onViewCreated()`: This is called after the view is created. In this method, you would typically bind specific views to properties by calling findViewById().
+* `onDestroyView()`: This is called after the view is stopped. This method is called when n navigating from one fragment
+  to another aka everytime the fragment is removed from the main view. In this way it's similiar to `onStop`. 
+  It is different from `onDestroy` which collects the garbage of the fragment and is only called when the parent activity is also destroyed
+
+
+
+## Unit 4: Network:
+## Section 2 API Requests 
+
+Use Retrofit -- other popular option is OkHTTP 
+
+Code base: https://github.com/sarahmurraydev/android-basics-kotlin-mars-photos-app 
+Contains: Activity, fragment, viewmodel. 
+
+The `ViewModel` is what communicates directly with the network service layer that we will build in this code lab. 
+The network service layer is made using retrofit and is what communicates with the backend 
+We use `LiveData` with lifecycle aware databinding in the viewModel to cause UI updates. 
+
+![network-flow-diagram](./Client-Side-Network-Flow.png)
+
+**Using Retrofit**
+
+Retrofit is a popular, well maintained, thrid party library. Using libraries like these is common in android development. 
+Just be sure to check the libraries github to make sure it is still being updates/ well maintained
+Retrofit will "fit" in the middle of our API call between the client (android OS) and server (RESTful API). 
+Retrofit will fetch the data using parameters we give it, parse the json (or other content type) response, and return a 
+kotlin object to our android client: 
+![retrofit-flow-diagram](./retrofit-flow.png)
+
+Steps to use:m
+1. Add dependency to `build.gradle`
+2. Make an API Service interface
+    * use Retrofit.builder()
+    * Add a converter factory for (de)serialization of response objects
+    * `ScalarsConverter` is popular converter factory that supports converting to strings/other primatives
+    
+3. Make a call to the retrofit service in a coroutine in the viewmodel 
+4. update live data tied to the ui with your API result
+    
+Retrofit Gotchas: 
+* The call to `create()` function on a Retrofit object is expensive and the app needs only one instance of Retrofit API service. So, you expose the service to the rest of the app using object declaration.
+* 
+
+Moshi is a JSON converter commonly used with retrofit. Moshi parses the data and converts it into kotlin objects. 
+To do this, Moshi needs to have a kotlin data class to store the parsed results. 
+Moshi is used over GSON which is the old lib name: https://www.reddit.com/r/androiddev/comments/684flw/why_use_moshi_over_gson/
+
+Steps to use Moshi:
+1. Add dependecy to gradle file 
+2. make a moshi variable of a moshi.builder 
+3. use this builder as the retrofit converter factory 
+4. change the API return type to a data class you made
+
+## Unit 4: Network
+## Section 3: Load and display images from the Internet
+
+Why is displaying photos so much work on android devices? 
+> Displaying a photo from a web URL might sound straightforward, but there is quite a bit of engineering to make it work well. 
+> 
+> The image has to be downloaded, internally stored, and decoded from its compressed format to an image that Android can use.
+>
+> The image should be cached to an in-memory cache, a storage-based cache, or both. 
+> 
+> All this has to happen in low-priority 
+> background threads so the UI remains responsive. Also, for best network and CPU performance, you might want to fetch and 
+> decode more than one image at once.
+
+Coil: new library for loading images (in lieu of Picasso or Glide)
+
+
+### Binding Adapters: 
+Binding Adapters are annotated methods used to create custom setters for custom properties of your view. 
+> Usually when you set a value in XML like `android:text="@string/my-text`, the android system automatically looks 
+> for a setter with the same `text` attribute (which is `setText(string)`, a method provided by the Android Framework). 
+> Similiar behavior can be customized though giving you the ability to provide a custom attribute and custom logic that 
+> will be defined by the Data Binding library
+
+
+Why do we need binding adapters? 
+> In  react, you can write in JSX, which is a combination of both JS + HTML components. This allows you to add data values to your HTML, 
+> like adding a paragraph of text or setting an image Src from a value returned from a backend API.
+>
+> In android, XML files exist in almost separate area of the app than the data/kotlin files that pull and update data. 
+> Binding adapters serve as a bridge and act almost like that react JSX -- it lets you create XML tags to define based on your data
+> or other relevant criteria 
