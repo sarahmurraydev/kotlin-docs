@@ -156,6 +156,13 @@ See [Higher Order Functions](#higher-order-functions)
 > Uniform Resource Name, ex: "tel:1-900-345-6789"
 
 ## V
+### ViewBinding 
+> One way binding that binds views (XML layouts) to code, but not vice versa. 
+> A binding class is generated for each XML layout. 
+> 
+> An instance of the binding class contains references to all the views by their ID. So, assuming you have a 
+> fragment like `my_fragment_layout.xml`, and you bind that fragment, you can access all elements of the binding via `binding.myTextView`, etc. 
+> See "Questions to Know" for steps to add view binding to your app
 
 ## W 
 

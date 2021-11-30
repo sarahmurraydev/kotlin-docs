@@ -283,7 +283,7 @@ How to add a RecyclerView:
    
 2. Implement an Adapter: 
 > Your app needs something to take data from the source and format it so each item can be displayed on the recyclerview. 
-> An **Adapter** is a deign pattern that **adapts** data for this purpose. The recylcerview uses an adapter to figure out how to display data on the screen
+> An **Adapter** is a design pattern that **adapts** data for this purpose. The recylcerview uses an adapter to figure out how to display data on the screen
 
 A Note on RecyclerView Adapter and how things work: 
 > When you run the app, RecyclerView uses the adapter to figure out how to display your data on screen. RecyclerView asks the adapter to create a new list item view for the first data item in your list. Once it has the view, it asks the adapter to provide the data to draw the item. This process repeats until the RecyclerView doesn't need any more views to fill the screen. If only 3 list item views fit on the screen at once, the RecyclerView only asks the adapter to prepare those 3 list item views (instead of all 10 list item views).
@@ -308,12 +308,15 @@ An adpater has multiple parts:
 >    private val data: List<Affirmation>
 >   ) {
 > 
+>       @param view - view/layout you are going to insert into the recyclervie
 >     class ItemViewHolder(private val view: View)
+>       // sometimes this will just be of type View and other times it might be view binding 
+>       // type of the view you want to add to your recyclerview 
 > }
 
 * 2d. Connect the view holder and adapter. 
     * Make your adapter class extend the `RecyclerView.Adapter` class 
-    * List you view holder class as the view holder type
+    * List your view holder class as the view holder type
     * Implement the abstract methods associated with extending `RecyclerView.Adapter`: 
         * `getItemCount()`: returns size of your data set
         * `onCreateViewHolder()`: called by the layout manager to create new ViewHolders when there are no existing view holders to be used.  

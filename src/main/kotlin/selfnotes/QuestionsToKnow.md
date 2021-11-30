@@ -7,13 +7,14 @@
 * What are scope functions in Kotlin? How many are there?
 
 ## Android 
-* What's view binding? Why should you use it?  
+* What's view binding? Why should you use it?
+* What's view binding vs data binding?
 * What package name is data usually stored in?
   ### RecyclerViews
 * What are the 3 parts of a recycler view
 * What steps do you need to take to implement a recyclerview
 * What is a layout inflater
-* Why and When should you set a fixed size to your recyclerview?
+* When and why should you set a fixed size to your recyclerview?
 * What type of width and height should you set for your recyclerview?
   ### Third Party Library 
 * What are libraries that allow you to pull data from the internet? 
@@ -64,8 +65,35 @@
   // Best way with view binding and no extra variable
   binding.myButton.text = "A button"
   ```
+* What are the steps for implementing view binding? 
+> 1. Add view binding to your gradle file: 
+> ```gradle
+> android {
+>    ...
+>    buildFeatures {
+>        viewBinding = true
+>    }
+> }
+>```
+> 2. Add view binding in the activity class: 
+> ```kotlin
+> class MainActivity : AppCompatActivity() {
+>     private lateinit var binding: ResultProfileBinding  // add this 1
+>
+>     override fun onCreate(savedInstanceState: Bundle?) {
+>         super.onCreate(savedInstanceState)
+>         binding = ResultProfileBinding.inflate(layoutInflater)  // add this 2
+>         val view = binding.root // add this 3
+>         setContentView(view) // add this 4
+>     }
+> }
+>```
   
 * What's view binding vs data binding?
+
+* What are the 3 parts of a recycler view
+* What steps do you need to take to implement a recyclerview
+* What is a layout inflater
 
 * When and why should you set a fixed size to your recyclerview?
 > You should set a fixed size to your recyclerview when the data being shown in that recyclerview will not change sizes dyanmically. For example, if you are displaying a list of items you've coded into your app then the data source lives in the client side code and will not change dynamically (it will only change if a new item is added to the data source & the app is rebuilt). If you are pulling data from an API however you may not want to set this value (esp if you make the call multiple times in the app's lifecycle or you allow users to pop items off the list). This value is used to improve performance.
