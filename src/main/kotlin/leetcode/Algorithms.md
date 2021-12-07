@@ -1,6 +1,7 @@
 # Leet Code Dec 2021
 
 ## 14 Day Algorithm Study Plan
+https://leetcode.com/study-plan/algorithm/?progress=pdp0iqt
 
 ### Day 1: Binary Search
 
@@ -158,3 +159,26 @@ class Solution {
 ```
 > Runtime: 180 ms, faster than 55.38% of Kotlin online submissions for Search Insert Position.
 Memory Usage: 36.3 MB, less than 84.28% of Kotlin online submissions for Search Insert Position.
+
+
+## Day 2 - Two Pointers 
+
+Problem 1: https://leetcode.com/problems/squares-of-a-sorted-array/ 
+
+First attempt: 
+```kotlin
+class Solution {
+    fun sortedSquares(nums: IntArray): IntArray {
+        for(n in nums.indices) {
+            nums[n] = nums[n] * nums[n]
+        }
+        println("nums is now doubled: ${nums}")
+        
+        nums.sort()
+        
+        return nums
+    }
+}
+```
+Before I even submitted this I read this 😭: 
+> Follow up: Squaring each element and sorting the new array is very trivial, could you find an O(n) solution using a different approach?
