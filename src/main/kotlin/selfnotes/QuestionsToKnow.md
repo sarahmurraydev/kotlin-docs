@@ -5,27 +5,27 @@
 * What is the `vararg` modifier? How is it used?
 * What's a primitive? 
 * What are scope functions in Kotlin? How many are there?
-
+---------------------------------------------------
 ## Android 
 * What's view binding? Why should you use it?
 * What's view binding vs data binding?
 * What package name is data usually stored in?
-  ### Coroutines
+### Coroutines
 * What are threads? What is concurrency? Why are threads important for it?
 * What does the suspend keyword mean? When do you use it?
 * What are the roles of a CoroutineScope, Job, and Dispatcher?
 * What is the difference between Deferred and Await?
-  ### RecyclerViews
+### RecyclerViews
 * What are the 3 parts of a recycler view
 * What steps do you need to take to implement a recyclerview
 * What is a layout inflater
 * When and why should you set a fixed size to your recyclerview?
 * What type of width and height should you set for your recyclerview?
-  ### Third Party Library 
+### Third Party Library 
 * What are libraries that allow you to pull data from the internet? 
 * What libraries allow you to load image URIs on android devices?
   
-  
+---------------------------
 ## XML
 * What are prefixes on XML attributes such as `xmlns` or `app`?
 * What should you set the width of an element within a constraint layout?
@@ -129,17 +129,25 @@ See also: https://developer.android.com/topic/libraries/view-binding?authuser=1
 * What is a layout inflater
 
 * When and why should you set a fixed size to your recyclerview?
-> You should set a fixed size to your recyclerview when the data being shown in that recyclerview will not change sizes dyanmically. For example, if you are displaying a list of items you've coded into your app then the data source lives in the client side code and will not change dynamically (it will only change if a new item is added to the data source & the app is rebuilt). If you are pulling data from an API however you may not want to set this value (esp if you make the call multiple times in the app's lifecycle or you allow users to pop items off the list). This value is used to improve performance.
+> You should set a fixed size to your recyclerview when the data being shown in that recyclerview will not change sizes 
+> dynamically. For example, if you are displaying a list of items you've coded into your app then the data source lives 
+> in the client side code and will not change dynamically (it will only change if a new item is added to the data source 
+> & the app is rebuilt). If you are pulling data from an API however you may not want to set this value 
+> (esp if you make the call multiple times in the app's lifecycle or you allow users to pop items off the list). 
+> This value is used to improve performance.
 
 * What type of width and height should you set for your recyclerview?
-> Be careful with `match_parent`. If you have `match_parent` for the height of a list item and your list is being displayed linearly, the item will take the height of the whole screen. The same issue can happen if you are using a other layout designs.
+> Be careful with `match_parent`. If you have `match_parent` for the height of a list item and your list is being 
+> displayed linearly, the item will take the height of the whole screen. The same issue can happen if you are using a 
+> other layout designs.
 
 ### Third Party Libraries 
 * What are libraries that allow you to pull data from the internet?
 > Retrofit, OkHTTP  
 
 * What libraries allow you to load image URIs on android devices?
-  > Picasso, Glide, and Coil are all libraries that allow you to load image resources. Coil is the newest and gaining popularity because it was written by and for kotlin.
+  > Picasso, Glide, and Coil are all libraries that allow you to load image resources. 
+  > Coil is the newest and gaining popularity because it was written by and for kotlin.
     https://proandroiddev.com/coil-vs-picasso-vs-glide-get-ready-go-774add8cfd40
 
 ## XML
