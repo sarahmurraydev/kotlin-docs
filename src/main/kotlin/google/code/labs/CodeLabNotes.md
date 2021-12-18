@@ -283,10 +283,15 @@ How to add a RecyclerView:
    
 2. Implement an Adapter: 
 > Your app needs something to take data from the source and format it so each item can be displayed on the recyclerview. 
-> An **Adapter** is a design pattern that **adapts** data for this purpose. The recylcerview uses an adapter to figure out how to display data on the screen
+> An **Adapter** is a design pattern that **adapts** data for this purpose. 
+> The recylcerview uses an adapter to figure out how to display data on the screen
 
 A Note on RecyclerView Adapter and how things work: 
-> When you run the app, RecyclerView uses the adapter to figure out how to display your data on screen. RecyclerView asks the adapter to create a new list item view for the first data item in your list. Once it has the view, it asks the adapter to provide the data to draw the item. This process repeats until the RecyclerView doesn't need any more views to fill the screen. If only 3 list item views fit on the screen at once, the RecyclerView only asks the adapter to prepare those 3 list item views (instead of all 10 list item views).
+> When you run the app, RecyclerView uses the adapter to figure out how to display your data on screen. 
+> RecyclerView asks the adapter to create a new list item view for the first data item in your list. 
+> Once it has the view, it asks the adapter to provide the data to draw the item. 
+> This process repeats until the RecyclerView doesn't need any more views to fill the screen. 
+> If only 3 list item views fit on the screen at once, the RecyclerView only asks the adapter to prepare those 3 list item views (instead of all 10 list item views).
 > Via [link](https://developer.android.com/codelabs/basic-android-kotlin-training-recyclerview-scrollable-list?authuser=1&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-2-pathway-3%3Fauthuser%3D1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-recyclerview-scrollable-list#3)
 
 An adpater has multiple parts: 
@@ -313,6 +318,8 @@ An adpater has multiple parts:
 >       // sometimes this will just be of type View and other times it might be view binding 
 >       // type of the view you want to add to your recyclerview 
 > }
+
+The view holder "holds" the views (list items) in memory and the views get recycled. It holds views and gets ready to add the next one and so forth
 
 * 2d. Connect the view holder and adapter. 
     * Make your adapter class extend the `RecyclerView.Adapter` class 
@@ -738,6 +745,49 @@ The following methods are new or different:
 
 
 ## Unit 4: Network:
+## Coroutines in Kotlin 
+
+**Threads**
+Threads are an abstraction for how a processor appears to handle multiple tasks at once. A thread is the smallest unit of
+code that can be scheduled and run in the confines of a program. 
+
+**Concurrency**
+Allows multiple units of code to be executed seemingly out of order. Execution occurs in parallel, 
+permitting more efficient use of resources. Concurrency is necessary to avoid blocking your app's UI thread. It ensures
+that a long running task (ex: nerwotk request) wont' stop the execution of other things in your app. Without this, your 
+app could appear unresponsive. 
+
+Note: When multiple threads are being run concurrently, there is not predictable order in which the threads will run or complete. 
+
+**Challenges with threads**
+* Threads require a lot of resources
+    * creating, switching and managing threads take up system resourses and time limiting the raw number of threads 
+      that can be managed at the same time. 
+* OS wants app to be responsive 
+    * current phones try to update the UI 60-120 times per second (60 at min)
+    * draw the UI at 60 fps -- meaning every screen update should take 16ms or less 
+    * frames often get dropped -- too many dropped frames and the app could crash 
+    
+**Race Condition**
+Multiple threads try to access the same value in memory at the same time. Can lead to random, hard to reproduce bugs that can even cause app crashes. 
+
+Note: because of the challenges with threads, their possibility of leading to race conditions or other app performance issues, 
+you should be careful (or avoid) working with threads directly. In kotlin, we can use coroutines instead to write "concurrent" code. 
+
+### Coroutines
+- much less expensive than threads
+- Kotlin provided more flexible and easier way to manage concurrency
+- enables multitasking but abstraction instead of working directly with threads
+    * s/t on android you will need to work directly with threads
+    * **when?:**
+- may or may not execute 
+- can store state (aka `continuations`)
+
+TODO: Add more notes about coroutines (Jobs, state, deffered, runblocking, async/await)
+
+
+
+
 ## Section 2 API Requests 
 
 Use Retrofit -- other popular option is OkHTTP 

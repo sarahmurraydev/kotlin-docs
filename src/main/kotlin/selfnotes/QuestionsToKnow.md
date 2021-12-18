@@ -10,6 +10,11 @@
 * What's view binding? Why should you use it?
 * What's view binding vs data binding?
 * What package name is data usually stored in?
+  ### Coroutines
+* What are threads? What is concurrency? Why are threads important for it?
+* What does the suspend keyword mean? When do you use it?
+* What are the roles of a CoroutineScope, Job, and Dispatcher?
+* What is the difference between Deferred and Await?
   ### RecyclerViews
 * What are the 3 parts of a recycler view
 * What steps do you need to take to implement a recyclerview
@@ -66,6 +71,7 @@
   binding.myButton.text = "A button"
   ```
 * What are the steps for implementing view binding? 
+See also: https://developer.android.com/topic/libraries/view-binding?authuser=1
 > 1. Add view binding to your gradle file: 
 > ```gradle
 > android {
@@ -90,7 +96,34 @@
 >```
   
 * What's view binding vs data binding?
+* What package name is data usually stored in?
 
+### Coroutines: 
+* What are threads? What is concurrency? Why are threads important for it?
+> Threads are an abstraction, the smallest unit of code scheduled to run by a program. 
+> Concurrency is the ability of an application to run multiple threads (aka "multithreading" or "multitasking"), 
+> seemingly out of order to optimize the use of resources. By running code in parallel, the application can continue 
+> to do things while wait in other parts for code to execute. 
+> 
+> This is especially important in android app where we want to keep the UI thread non-blocking. 
+> Otherwise the app could become non-responsive
+* What does the suspend keyword mean? When do you use it?
+> `Suspend` means that the function or code block can be paused or resumed. 
+> A function that calls a suspend function must also use the suspend keyword
+> 
+> The lambdas passed into `async()` and `runBlocking` are suspend functions, but not those functions themselves
+* What are the roles of a CoroutineScope, Job, and Dispatcher?
+> CoroutineScope = methods that launch coroutines (ex: launch, await) extend this. A context that enforces cancelation and 
+> other rules passed down to its children and their children recursively
+> 
+> Job = A cancelable unit of work with a lifecycle. ex: launch
+> 
+> Dispatcher = tells the coroutine which thread to run on, removing this responsibility from the dev. 
+> Coroutines using Main dispatcher will run on the main thread. Others include Default, IO, Unconfined. 
+* What is the difference between Deferred and Await?
+> 
+
+### RecyclerView:
 * What are the 3 parts of a recycler view
 * What steps do you need to take to implement a recyclerview
 * What is a layout inflater
