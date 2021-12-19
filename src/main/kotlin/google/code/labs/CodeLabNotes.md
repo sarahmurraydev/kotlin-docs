@@ -284,7 +284,7 @@ How to add a RecyclerView:
 2. Implement an Adapter: 
 > Your app needs something to take data from the source and format it so each item can be displayed on the recyclerview. 
 > An **Adapter** is a design pattern that **adapts** data for this purpose. 
-> The recylcerview uses an adapter to figure out how to display data on the screen
+> The RecylcerView uses an adapter to figure out how to display data on the screen
 
 A Note on RecyclerView Adapter and how things work: 
 > When you run the app, RecyclerView uses the adapter to figure out how to display your data on screen. 
@@ -294,7 +294,7 @@ A Note on RecyclerView Adapter and how things work:
 > If only 3 list item views fit on the screen at once, the RecyclerView only asks the adapter to prepare those 3 list item views (instead of all 10 list item views).
 > Via [link](https://developer.android.com/codelabs/basic-android-kotlin-training-recyclerview-scrollable-list?authuser=1&continue=https%3A%2F%2Fdeveloper.android.com%2Fcourses%2Fpathways%2Fandroid-basics-kotlin-unit-2-pathway-3%3Fauthuser%3D1%23codelab-https%3A%2F%2Fdeveloper.android.com%2Fcodelabs%2Fbasic-android-kotlin-training-recyclerview-scrollable-list#3)
 
-An adpater has multiple parts: 
+An adapter has multiple parts: 
 * 2a. create an XML element for whatever item your recyclerview is holding 
 * 2b. create an `ItemAdapter` class
   > ```kotlin
@@ -742,6 +742,16 @@ The following methods are new or different:
   to another aka everytime the fragment is removed from the main view. In this way it's similiar to `onStop`. 
   It is different from `onDestroy` which collects the garbage of the fragment and is only called when the parent activity is also destroyed
 
+// TODO: finish nav component notes section 2 
+
+## Unit 3: Navigation 
+## Architecture Components 
+
+### Store Data in a ViewModel
+
+Android Jetpack has a set of [architecture components](https://developer.android.com/topic/architecture?authuser=1) 
+that help you practice best arch practices. Good architecture is robust, scalable, and flexible. 
+
 
 
 ## Unit 4: Network:
@@ -783,7 +793,7 @@ you should be careful (or avoid) working with threads directly. In kotlin, we ca
 - may or may not execute 
 - can store state (aka `continuations`)
 
-TODO: Add more notes about coroutines (Jobs, state, deffered, runblocking, async/await)
+TODO: Add more notes about coroutines (Jobs, state, deferred, runBlocking, async/await)
 
 
 
@@ -866,3 +876,57 @@ Why do we need binding adapters?
 > In android, XML files exist in almost separate area of the app than the data/kotlin files that pull and update data. 
 > Binding adapters serve as a bridge and act almost like that react JSX -- it lets you create XML tags to define based on your data
 > or other relevant criteria 
+
+**Section Summary:**
+* The Coil library simplifies the process of managing images, such as download, buffer, decode, and cache images in your app.
+* Binding adapters are extension methods that sit between a view and that view's bound data. 
+  Binding adapters provide custom behavior when the data changes, for example, to call Coil to load an image from a URL into an ImageView.
+* Binding adapters are extension methods annotated with the @BindingAdapter annotation.
+* To display a grid of images, use a RecyclerView with a GridLayoutManager.
+* To update the list of properties when it changes, use a binding adapter between the RecyclerView and the layout.
+
+
+## Unit 4: Network
+## Section 4: Test Network Requests
+
+You can add API example data (for testing purposes) in your test/res directory.
+To be able to access files in this resource directory, the test resource directory needs to be explicitly specified 
+as a "source" directory in the build file. Add the following line:
+```gradle
+// to app/build.gradle: 
+android {
+    ...
+    sourceSets {
+       test.resources.srcDirs += 'src/test/res'
+    }
+}
+```
+This lets us access our resource files without having to type out the full path to the file in our code every time it 
+is accessed in a test. Typing out the full path is a poor practice for testing as file paths can change between 
+machines and operating systems.
+
+**Mock**
+Mocking means we are simulating the value of a piece of code. It is extremely popular practice in android testing. 
+We can mock all kinds of things: classes, functions, APIs. The mock will allow us to define a return value for these items
+that can then be used in our test. 
+
+For example, we can mock that an API will return some proper JSON so that we can 
+test our transformer (or data class) is properly parsing the JSON. In addition, we can mock that an API will return an error
+(fail to load) to test our app's unhappy path (error state) is functioning properly
+
+**A New Dependency**
+The codelab () tells us to add the following dependencies for testing: 
+```gradle
+depenedencies {
+    ...
+    // testing
+    testImplementation 'junit:junit:4.12'
+    testImplementation "androidx.arch.core:core-testing:2.1.0"
+    testImplementation "com.squareup.okhttp3:mockwebserver:4.9.1"
+}
+```
+
+The first two you are familiar with -- basic testing packages. 
+The third one is new.
+This dependency lets us create a mock server. Essentially, the mock server intercepts network requests and 
+reroutes them to return the mock data that we have defined!
