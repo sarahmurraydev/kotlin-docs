@@ -8,8 +8,46 @@ Goes over kotlin basics, most of it is intuitive, but the takeaways are:
 ## Syntax 
 
 ### val vs var
-* `val` used for variable declaration
+* `val` used for variable declaration, read-only properties
 * `var` means it can be overwritten later
+ 
+### Kotlin Property Delegate
+variables defined with `var` are mutable and as such, kotlin generates both a getter and setter method for these values under the hood. 
+variables defined with `val` are immutable and so only `getter` methods are generated. This method is called whenever you make reference to the object.
+
+**Property Delegation** 
+> hand off the getter and setter responsibilities to a different class. 
+> A delegate property is defined using the `by` clause and a class instance: 
+> ```kotlin
+> var <property-name> : <property-type> by <delegate-class>()
+> ```
+
+### Backing Property
+Sometimes, you will need an object to be modifiable only in the class in which it is created. Outside of this class, we 
+do not want others to have the ability to modify it, but do need them to be able to access the property. 
+This is a use case for the **backing property**.
+
+Put another way, the backing property is used inside the class that instantiated the object, the data should be editable, 
+so they should be `private` and `var` but from outside the class, data should be readable, but not editable, 
+so the data should be exposed as `public` and `val`.
+
+**How it works**
+The backing property works by overriding the getter method of the object to return a read-only version of the data. 
+This protects the app data inside the class from unwanted and unsafe changes by external classes, 
+but it allows external callers to safely access its value.
+
+**How to implement it**
+```kotlin
+public MyClass {
+  // define the data in your class that is mutable and private:
+  private var _myAge = 34 // the convention is to make the private property be prefixed with an underscore
+  
+  // define an overridden getter for this data obj that is public for other classes to be able to access, but not change
+  public val myAge: Int
+    get() = _myAge
+}
+```
+
 
 ### Quotes 
 * single quotes `'` designates characters
@@ -448,6 +486,21 @@ println("My new aquarium's volume is: ${myNewAquarium.volume}")
 * **private**: members are only visible *inside* the class, subclasses can't see private members
 * **protected**: members are only visible *inside* the class, but subclasses CAN see
 * **internal**: members are visible inside the module
+
+
+#### Init Methods 
+Kotlin provides the initializer block (also known as the init block) as a place for initial setup code needed 
+during the initialization of an object instance. This block of code is run when the object instance is first created and initialized.
+
+```kotlin
+class GameViewModel : ViewModel() {
+   init {
+       Log.d("GameFragment", "GameViewModel created!")
+   }
+
+   ...
+}
+```
 
 ## General / Other Useful Things to Know:
 ### String manipulation:

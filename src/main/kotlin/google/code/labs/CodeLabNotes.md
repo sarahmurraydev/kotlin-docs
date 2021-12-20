@@ -752,6 +752,39 @@ The following methods are new or different:
 Android Jetpack has a set of [architecture components](https://developer.android.com/topic/architecture?authuser=1) 
 that help you practice best arch practices. Good architecture is robust, scalable, and flexible. 
 
+At minimum, the recommended Android architecture has two layers: 
+1. UI Layer: 
+2. Data Layer: 
+
+The UI layer should contain two components: 
+1. UI controllers: Activities, Fragments -- these elements show the data to the user and handle interactions 
+2. State holders (viewModels) that are responsible for holding data and presenting it to the UI, independent of configuration changes. 
+
+By having these two pieces to the UI layer we have well organized code that consists of UI drive by data models.
+
+**ViewModel**
+> holds all business logic needed for the UI and prepares it for display. 
+> Maintained during configuration changes, not destroyed like UI elements are, ensuring the data is available for the new activity/fragment instance
+> It should **not** access view hierarchy (`binding` obj) or have reference to any UI elements. 
+
+**Steps to implement a View Model**
+1. Make a new file `MyViewModelClass`
+2. Add reference to this view model in your UI element (Activity/Fragment)
+    * do this via property delegation
+   ```kotlin
+      // at the top of the Activity / Fragment class:
+      private val viewModel : MyViewModelClass by viewModels()
+   ```
+3. Add data in your viewModel 
+    * assign the data via the backing property
+    * Note: mutable data in the viewModel should always be private! Do not expose these fields
+    
+4. Add other business logic to VM that helps present and update data for the UI
+    
+**ViewModel Lifecycle**
+* A `viewModel` is alive so long as the scope of the activity or fragment is alive 
+* the `viewModel` **is not** destroyed when the activity or fragment undergoes a configuration change (ex: device rotation)
+* the `viewModel` is killed when/if the activity/fragment is killed (either killing the app or calling `finish()` in the code)
 
 
 ## Unit 4: Network:
@@ -813,7 +846,7 @@ We use `LiveData` with lifecycle aware databinding in the viewModel to cause UI 
 
 **Using Retrofit**
 
-Retrofit is a popular, well maintained, thrid party library. Using libraries like these is common in android development. 
+Retrofit is a popular, well maintained, third party library. Using libraries like these is common in android development. 
 Just be sure to check the libraries github to make sure it is still being updates/ well maintained
 Retrofit will "fit" in the middle of our API call between the client (android OS) and server (RESTful API). 
 Retrofit will fetch the data using parameters we give it, parse the json (or other content type) response, and return a 
